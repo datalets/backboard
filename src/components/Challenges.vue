@@ -117,13 +117,13 @@
              @change="changeDark">
         <option value="default" selected>🌗</option>
         <option v-for="option in darkOptions"
-                v-bind:value="option.id" >{{ option.name }}</option>
+                :value="option.id" >{{ option.name }}</option>
       </select>&nbsp;
       <select v-model="sortOrder" id="sortBy"
              @change="changeOrder">
         <option value="default" selected>📚</option>
         <option v-for="option in sortOptions"
-                v-bind:value="option.id" >{{ option.name }}</option>
+                :value="option.id" >{{ option.name }}</option>
       </select>&nbsp;
     </div>
   </div>
@@ -134,11 +134,11 @@ import { Row, Column } from "vue-grid-responsive";
 
 import moment from 'moment'
 
-import Header from './Header'
-import Footer from './Footer'
-import Previews from './Previews'
-import Countdown from './Countdown'
-import Honeycomb from './Honeycomb'
+import Header from './Header.vue'
+import Footer from './Footer.vue'
+import Previews from './Previews.vue'
+import Countdown from './Countdown.vue'
+import Honeycomb from './Honeycomb.vue'
 
 export default {
   name: "Challenges",

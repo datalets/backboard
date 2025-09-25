@@ -3,27 +3,26 @@
 
     <div container v-if="event.description" class="event-details">
       <markdown class="description col"
-         :source="event.description"
-         :html="true" />
+         :source="event.description" />
     </div>
 
   </div>
 </template>
 
 <script>
-import VueMarkdown from '@adapttive/vue-markdown'
+import Markdown from "vue3-markdown-it";
 
 export default {
   name: "Footer",
   props: {
     event: {
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    markdown: VueMarkdown,
-  }
-}
+    markdown: Markdown,
+  },
+};
 </script>
 
 <style scoped>

@@ -4,8 +4,7 @@
 
       <div class="drib" v-if="drib.content">
         <markdown class="drib-content"
-          :source="drib.content"
-          :html="true" />
+          :source="drib.content" />
         <div class="drib-meta">
           <span class="drib-since" :title="drib.date">
             {{ drib.timesince }}
@@ -21,17 +20,17 @@
 </template>
 
 <script>
-import VueMarkdown from '@adapttive/vue-markdown'
+import Markdown from "vue3-markdown-it";
 
 export default {
   name: "Dribs",
   props: {
-    activities: Array
+    activities: Array,
   },
   components: {
-    markdown: VueMarkdown,
-  }
-}
+    markdown: Markdown,
+  },
+};
 </script>
 
 <style scoped>

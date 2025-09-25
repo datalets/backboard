@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import Challenges from "./components/Challenges";
-import ModalFrame from "./components/ModalFrame";
+import Challenges from "./components/Challenges.vue";
+import ModalFrame from "./components/ModalFrame.vue";
 
 export default {
   name: "App",
@@ -30,11 +30,23 @@ export default {
     ModalFrame,
   },
   data() {
+    return {
+      dribdatApi: null,
+      dribdatHome: "#top",
+      dribdatDribs: "",
+      voteUrl: "",
+      allowToolbar: true,
+      defaultOptions: "",
+      showToolbar: false,
+      darkClass: "",
+    };
+  },
+  created() {
     let apiUrl = null;
     let dribUrl = null;
     let eventId = null;
     let baseUrl = process.env.VUE_APP_DRIBDAT_URL || null;
-    if (baseUrl && !eventId && baseUrl.indexOf('/event/')>0) {
+    if (baseUrl && !eventId && baseUrl.indexOf('/event/') > 0) {
       eventId = baseUrl.match('/event/([0-9]+)');
       if (eventId !== null) {
         eventId = eventId[1];
@@ -51,18 +63,12 @@ export default {
       apiUrl = [baseUrl, "api/event", eventId, "datapackage.json"].join("/");
       dribUrl = [baseUrl, "api/event", eventId, "posts.json?limit=200"].join("/");
     }
-    let my_config = {
-      dribdatApi: apiUrl,
-      dribdatHome: baseUrl || '#top',
-      dribdatDribs: dribUrl || process.env.VUE_APP_DRIBS_URL || '',
-      voteUrl: process.env.VUE_APP_VOTE_FORM_URL || '',
-      allowToolbar: !(Boolean(process.env.VUE_APP_HIDE_TOOLBAR) || false),
-      defaultOptions: process.env.VUE_APP_DEFAULT_OPTS || '',
-      showToolbar: false,
-      darkClass: '',
-    }
-    //console.debug(my_config);
-    return my_config;
+    this.dribdatApi = apiUrl;
+    this.dribdatHome = baseUrl || '#top';
+    this.dribdatDribs = dribUrl || process.env.VUE_APP_DRIBS_URL || '';
+    this.voteUrl = process.env.VUE_APP_VOTE_FORM_URL || '';
+    this.allowToolbar = !(Boolean(process.env.VUE_APP_HIDE_TOOLBAR) || false);
+    this.defaultOptions = process.env.VUE_APP_DEFAULT_OPTS || '';
   },
   methods: {
     toggleOptions() {
