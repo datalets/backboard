@@ -34,7 +34,10 @@
       "eslint:recommended"
     ],
     "parserOptions": {
-      "parser": "@babel/eslint-parser"
+      "babelOptions": {
+        "configFile": "./.babelrc",
+        "babelrc": true
+      }
     },
     "rules": {}
   },
