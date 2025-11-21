@@ -47,7 +47,7 @@ export default {
       formref = "https://docs.google.com/forms/d/e/" + formref;
       formref = formref + "/viewform?embedded=true";
     }
-    
+
     this.framesrc = formref;
   },
 };
