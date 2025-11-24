@@ -1,5 +1,16 @@
 <template>
   <div id="app" :class="darkClass">
+    <div class="language-switcher">
+      <select v-model="locale">
+        <option
+          v-for="loc in availableLocales"
+          :key="`locale-${loc}`"
+          :value="loc"
+        >
+          {{ languageNames[loc] }}
+        </option>
+      </select>
+    </div>
     <Challenges
       @closeToolbar="toggleOptions"
       @previewOff="previewOff"
@@ -15,15 +26,16 @@
       <a href="https://dribdat.cc" target="_blank">dribdat</a>
       &#x1F3C0;
       <a v-if="allowToolbar" @click="toggleOptions" class="options"
-        ><span>options</span></a
+        ><span>{{ $t('options') }}</span></a
       >
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue"
-import Challenges from "./components/Challenges.vue"
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import Challenges from "./components/Challenges.vue";
 
 export default {
   name: "App",
@@ -31,6 +43,15 @@ export default {
     Challenges,
   },
   setup() {
+    const { locale, availableLocales } = useI18n();
+    const languageNames = {
+      en: "English",
+      fr: "Français",
+      de: "Deutsch",
+      it: "Italiano",
+      uk: "Українська",
+      hi: "हिन्दी",
+    };
     const dribdatApi = ref(null);
     const dribdatHome = ref("#top");
     const dribdatDribs = ref("");
@@ -115,12 +136,22 @@ export default {
       previewOff,
       previewOn,
       setDarkMode,
-    }
-  }
-}
+      locale,
+      availableLocales,
+      languageNames,
+    };
+  },
+};
 </script>
 
 <style>
+.language-switcher {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1001;
+}
+
 @import 'https://cdn.jsdelivr.net/gh/maxwell-k/dejavu-sans-mono-web-font/index.css';
 
 #app {

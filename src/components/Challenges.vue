@@ -1,6 +1,6 @@
 <template>
   <div class="challenges">
-    <Header v-if="isHeadline" :event="event"></Header>
+    <EventHeader v-if="isHeadline" :event="event"></EventHeader>
 
     <div class="grid-container" v-if="!isHexagons">
       <div
@@ -67,18 +67,18 @@
             </div>
 
             <div class="team-join" v-if="isButtons">
-              <button @click="joinTeam(project)" title="Join">🏀</button>
+              <button @click="joinTeam(project)" :title="$t('join')">🏀</button>
               <button
                 v-if="isComments"
                 @click="openComment(project)"
-                title="Comment"
+                :title="$t('comment')"
               >
                 💬
               </button>
               <button
                 v-show="project.contact_url"
                 @click="contactTeam(project)"
-                title="Contact"
+                :title="$t('contact')"
               >
                 👋
               </button>
@@ -109,9 +109,9 @@
 
     <Countdown v-if="isCountdown" :event="event"></Countdown>
 
-    <Footer v-if="isHeadline" :event="event"></Footer>
+    <EventFooter v-if="isHeadline" :event="event"></EventFooter>
 
-    <div class="loading" v-if="projects == null" title="Loading ...">
+    <div class="loading" v-if="projects == null" :title="$t('loading')">
       <i class="ball">🏀</i>
     </div>
 
@@ -121,30 +121,31 @@
       <button
         class="modal-close-button"
         @click="$emit('closeToolbar')"
-        title="Close"
+        :title="$t('close')"
       >
         ⬡
       </button>
       <span class="share-button btn">
-        🌐<a :href="shareUrl()">Share</a>
+        🌐<a :href="shareUrl()">{{ $t('share') }}</a>
       </span>
       &nbsp;
       <input type="checkbox" v-model="isHeadline" id="isHeadline" />
-      <label for="isHeadline" title="Header">⛳</label>
+      <label for="isHeadline" :title="$t('header')">⛳</label>
       <input type="checkbox" v-model="isChallenges" id="isChallenges" />
-      <label for="isChallenges" title="Show Challenges">🏆</label>
+      <label for="isChallenges" :title="$t('show_challenges')">🏆</label>
       <input type="checkbox" v-model="isHexagons" id="isHexagons" />
-      <label for="isHexagons" title="Hexgrid mode">⬣</label>
+      <label for="isHexagons" :title="$t('hexgrid_mode')">⬣</label>
       <input type="checkbox" v-model="isCountdown" id="isCountdown" />
-      <label for="isCountdown" title="Countdown">⏰</label>
+      <label for="isCountdown" :title="$t('countdown')">⏰</label>
       <input type="checkbox" v-model="isPreviews" id="isPreviews" />
-      <label for="isPreviews" title="Pop-ups">👀</label>
+      <label for="isPreviews" :title="$t('pop_ups')">👀</label>
       <input type="checkbox" v-model="isExcerpts" id="isExcerpts" />
-      <label for="isExcerpts" title="Excerpts">🖼️</label>
+      <label for="isExcerpts" :title="$t('excerpts')">🖼️</label>
       <input type="checkbox" v-model="isButtons" id="isButtons" />
-      <label for="isButtons" title="Join/Contact button">🪟</label>
+      <label for="isButtons" :title="$t('join_contact_button')">🪟</label>
       <input type="checkbox" v-model="isComments" id="isComments" />
-      <label for="isComments" title="Comment buttons">💬</label>
+      <label for="isComments" :title="$t('comment_buttons')">💬</label>
+      <label for="darkMode">{{ $t('dark_mode') }}</label>
       <select v-model="darkMode" id="darkMode" @change="changeDark">
         <option value="default" selected>🌗</option>
         <option
@@ -156,6 +157,7 @@
         </option>
       </select>
       &nbsp;
+      <label for="sortBy">{{ $t('sort_by') }}</label>
       <select v-model="sortOrder" id="sortBy" @change="changeOrder">
         <option value="default" selected>📚</option>
         <option
@@ -173,9 +175,10 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import moment from "moment";
-import Header from "./Header.vue";
-import Footer from "./Footer.vue";
+import EventHeader from "./Header.vue";
+import EventFooter from "./Footer.vue";
 import Previews from "./Previews.vue";
 import Countdown from "./Countdown.vue";
 import ProjectHoneycomb from "./Honeycomb.vue";
@@ -192,10 +195,11 @@ export default {
     Countdown,
     ProjectHoneycomb,
     Previews,
-    Header,
-    Footer,
+    EventHeader,
+    EventFooter,
   },
   setup(props, { emit }) {
+    const { t } = useI18n();
     const event = ref({});
     const projects = ref(null);
     const activities = ref(null);
@@ -211,19 +215,19 @@ export default {
     const isExcerpts = ref(false);
     const activePreview = ref(-1);
     const sortOrder = ref("title");
-    const sortOptions = ref([
-      { id: "id", name: "id" },
-      { id: "ident", name: "Ident" },
-      { id: "name", name: "Name" },
-      { id: "summary", name: "Summary" },
-      { id: "hashtag", name: "Hashtag" },
-      { id: "score", name: "Score" },
+    const sortOptions = computed(() => [
+      { id: "id", name: t("id") },
+      { id: "ident", name: t("ident") },
+      { id: "name", name: t("name") },
+      { id: "summary", name: t("summary") },
+      { id: "hashtag", name: t("hashtag") },
+      { id: "score", name: t("score") },
     ]);
     const darkMode = ref("default");
-    const darkOptions = ref([
-      { id: "default", name: "System" },
-      { id: "light", name: "Light" },
-      { id: "dark", name: "Dark" },
+    const darkOptions = computed(() => [
+      { id: "default", name: t("system") },
+      { id: "light", name: t("light") },
+      { id: "dark", name: t("dark") },
     ]);
 
     const filterProjects = computed(() => {
@@ -334,7 +338,7 @@ export default {
         }
       }
       if (!datasrc) {
-        errorMessage.value = "No data source provided.";
+        errorMessage.value = t("no_data_source");
         return;
       }
       let dribs_url = props.dribs;
@@ -370,7 +374,7 @@ export default {
               }
             });
             if (data.projects === null) {
-              return Promise.reject("Project data not found");
+              return Promise.reject(t("project_data_not_found"));
             }
           }
           projects.value = [];
@@ -447,7 +451,7 @@ export default {
         })
         .catch((err) => {
           if (err.message.indexOf('not valid JSON')) {
-            errorMessage.value = 'Could not load valid hackathon metadata.'
+            errorMessage.value = t("could_not_load_metadata");
             console.warn(err.message);
             console.log(datasrc);
           } else {
