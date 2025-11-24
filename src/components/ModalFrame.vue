@@ -1,9 +1,10 @@
 <template>
   <section>
-    <button @click="isVoteActive = true">🗳️ Contribute</button>
+    <button @click="isVoteActive = true">🗳️ {{ $t('contribute') }}</button>
 
     <Modal v-if="isVoteActive" @close="isVoteActive = false">
-      <div class="content" slot="body">
+      <template v-slot:body>
+<div class="content" >
         <iframe
           :src="framesrc"
           width="100%"
@@ -14,6 +15,7 @@
           >Loading…</iframe
         >
       </div>
+</template>
     </Modal>
   </section>
 </template>

@@ -7,7 +7,7 @@
             <div
               class="titlebar"
               @touchstart="touchStart"
-              title="Swipe here or tap below to advance"
+              :title="$t('swipe_to_advance')"
               :style="
                 'border-color:' +
                 (project.logo_color ? project.logo_color : '#ccc')
@@ -16,7 +16,7 @@
               <div class="imagepreview" v-if="project.image_url">
                 <a
                   class="imagepreview-floating"
-                  title="Open image"
+                  :title="$t('open_image')"
                   :href="project.image_url"
                   target="_blank"
                   :style="'background-image:url(' + project.image_url + ')'"
@@ -44,49 +44,49 @@
 
               <div class="status">
                 <button
-                  title="Open project page"
+                  :title="$t('open_project_page')"
                   @click="seeDetails(project.url)"
                 >
                   ◳ {{ project.phase }}
                 </button>
                 <button
                   v-if="isEmbeddable(project)"
-                  title="Open in a new window"
+                  :title="$t('open_in_new_window')"
                   @click="seeEmbed(project)"
                 >
-                  ⟁ View
+                  ⟁ {{ $t('view') }}
                 </button>
                 <button
                   v-if="project.download_url"
-                  title="Open demo or download link"
+                  :title="$t('open_demo_link')"
                   @click="seeDetails(project.download_url)"
                 >
-                  ⧨ Demo
+                  ⧨ {{ $t('demo') }}
                 </button>
 
                 <button
                   v-if="withButtons"
                   @click="joinTeam(project)"
-                  title="Join this team"
+                  :title="$t('join_this_team')"
                 >
-                  🏀 Join
+                  🏀 {{ $t('join') }}
                 </button>
 
                 <button
                   v-if="withComments"
                   @click="openComment(project)"
-                  title="Write a comment to the team"
+                  :title="$t('write_a_comment')"
                 >
-                  🗨️ Post
+                  🗨️ {{ $t('post') }}
                 </button>
 
                 <button
                   v-if="withButtons"
                   v-show="project.contact_url"
                   @click="contactTeam(project)"
-                  title="Open the contact page"
+                  :title="$t('open_contact_page')"
                 >
-                  👋 Contact
+                  👋 {{ $t('contact') }}
                 </button>
               </div>
             </div>
@@ -112,7 +112,7 @@
                       aria-valuemin="0"
                       aria-valuemax="100"
                       tabindex="-1"
-                      title="Time remaining"
+                      :title="$t('time_remaining')"
                       :style="
                         'width:' +
                         ruigehond +
@@ -128,22 +128,22 @@
                     <button
                       v-if="project.download_url"
                       class="fullscreen-demo-button"
-                      title="Open demo or download link"
+                      :title="$t('open_demo_link')"
                       @click="seeDetails(project.download_url)"
                     >
-                      Demo
+                      {{ $t('demo') }}
                     </button>
                     <button
                       @click="toggleNextproject()"
                       class="fullscreen-next-button"
-                      title="Next project"
+                      :title="$t('next_project')"
                     >
                       ▷
                     </button>
                     <button
                       @click="toggleFullscreen()"
                       class="fullscreen-close-button"
-                      title="Close fullscreen"
+                      :title="$t('close_fullscreen')"
                     >
                       ⨱
                     </button>
@@ -158,22 +158,22 @@
                   v-if="showExcerpt && isEmbeddable(project)"
                   class="go-fullscreen"
                   @click="toggleFullscreen()"
-                  title="Open in full screen mode - tap ⬡ to close again"
+                  :title="$t('open_fullscreen')"
                 >
-                  &#x26F6;<span>&nbsp;Zoom</span>
+                  &#x26F6;<span>&nbsp;{{ $t('zoom') }}</span>
                 </button>
 
                 <div class="autotext-nav">
                   <span v-if="project.autotext">
-                    <a href="#readme">README</a>
+                    <a href="#readme">{{ $t('readme') }}</a>
                   </span>
                   <span v-if="project.activities">
-                    <a href="#dribs">DRIBS</a>
+                    <a href="#dribs">{{ $t('dribs') }}</a>
                   </span>
                 </div>
 
                 <div v-if="project.longtext">
-                  <a class="autotext-link" name="pitch" href="#pitch">PITCH</a>
+                  <a class="autotext-link" name="pitch" href="#pitch">{{ $t('pitch') }}</a>
                   <Markdown
                     class="preview-longtext"
                     :source="project.longtext"
@@ -182,7 +182,7 @@
 
                 <div v-if="project.autotext">
                   <a class="autotext-link" name="readme" href="#pitch"
-                    >README</a
+                    >{{ $t('readme') }}</a
                   >
                   <Markdown
                     class="preview-autotext"
@@ -192,25 +192,25 @@
                     class="autotext-open"
                     target="_blank"
                     :href="project.autotext_url"
-                    >Open original ...</a
+                    >{{ $t('open_original') }}</a
                   >
                 </div>
 
                 <div v-if="project.activities">
-                  <a class="autotext-link" name="dribs" href="#pitch">DRIBS</a>
+                  <a class="autotext-link" name="dribs" href="#pitch">{{ $t('dribs') }}</a>
                   <Dribs :activities="project.activities" />
                 </div>
               </div>
             </div>
           </div>
           <div class="modal-footer" @touchstart="touchStart">
-            <button class="nav nav-prev" @click="goPrev()" title="Previous">
+            <button class="nav nav-prev" @click="goPrev()" :title="$t('previous')">
               ◁
             </button>
-            <button @click="selectNone()" class="nav nav-close" title="Close project">
+            <button @click="selectNone()" class="nav nav-close" :title="$t('close_project')">
               &check;
             </button>
-            <button class="nav nav-next" @click="goNext()" title="Next">
+            <button class="nav nav-next" @click="goNext()" :title="$t('next')">
               ▷
             </button>
           </div>
