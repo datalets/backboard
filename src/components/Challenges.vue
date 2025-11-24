@@ -172,7 +172,8 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
+import { useRouter } from "vue-router";
 import moment from "moment";
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
@@ -187,6 +188,7 @@ export default {
     dribs: String,
     options: String,
     toolbar: Boolean,
+    id: String,
   },
   components: {
     Countdown,
@@ -196,6 +198,7 @@ export default {
     Footer,
   },
   setup(props, { emit }) {
+    const router = useRouter();
     const event = ref({});
     const projects = ref(null);
     const activities = ref(null);
@@ -246,7 +249,7 @@ export default {
     };
 
     const seeDetails = (project) => {
-      window.open(project.url);
+      router.push({ name: 'Project', params: { id: project.id } });
     };
 
     const changeDark = () => {
@@ -454,6 +457,17 @@ export default {
             errorMessage.value = err;
           }
         });
+    });
+
+    watch(projects, (newProjects) => {
+      if (props.id && newProjects && newProjects.length > 0) {
+        const project = newProjects.find(p => p.id == props.id);
+        if (project) {
+          activePreview.value = project.id;
+          isPreviews.value = true;
+          emit("previewOn");
+        }
+      }
     });
 
     return {
