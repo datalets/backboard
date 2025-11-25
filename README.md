@@ -75,6 +75,22 @@ yarn build
 yarn lint
 ```
 
+### Internationalization
+
+This project uses `vue-i18n` for internationalization. All locale files are located in the `src/locales` directory.
+
+**Adding or Updating Translations**
+
+To add or update a translation for an existing language, edit the corresponding JSON file in `src/locales`. For example, to update a French translation, you would edit `src/locales/fr.json`.
+
+**Adding a New Language**
+
+1.  Create a new JSON file in `src/locales` with the two-letter locale code for the new language (e.g., `es.json` for Spanish).
+2.  Copy the contents of `src/locales/en.json` into your new file.
+3.  Translate all the string values into the new language.
+4.  Import the new locale file in `src/main.js` and add it to the `messages` object in the `createI18n` configuration.
+5.  Add the new language to the `languageNames` object in `src/App.vue` to make it available in the language switcher.
+
 ### Recommended Browser Setup
 
 - Chromium-based browsers (Chrome, Edge, Brave, etc.):
