@@ -1,6 +1,11 @@
 <template>
   <div class="challenges">
-    <Header v-if="isHeadline" :event="event"></Header>
+    <Header
+      v-if="isHeadline"
+      :event="event"
+      :isEditing="isEditing"
+      @editField="editField"
+    ></Header>
 
     <div class="grid-container" v-if="!isHexagons">
       <div
@@ -43,6 +48,13 @@
 
             <div class="name">
               {{ project.name }}
+              <button
+                v-if="isEditing"
+                class="edit-btn"
+                @click.stop="editField('project', project, 'name', 'Project Name')"
+              >
+                ✏️
+              </button>
             </div>
 
             <div
@@ -60,10 +72,21 @@
             </div>
 
             <div
-              v-show="project.summary || !project.is_challenge"
+              v-show="project.summary || !project.is_challenge || isEditing"
               class="summary"
             >
-              <p>{{ project.summary }}</p>
+              <p>
+                {{ project.summary }}
+                <button
+                  v-if="isEditing"
+                  class="edit-btn"
+                  @click.stop="
+                    editField('project', project, 'summary', 'Project Summary')
+                  "
+                >
+                  ✏️
+                </button>
+              </p>
             </div>
 
             <div class="team-join" v-if="isButtons">
@@ -99,6 +122,8 @@
       :projects="projects"
       :eventData="isHeadline ? event : null"
       :profileUrl="profileUrl"
+      :isEditing="isEditing"
+      @editField="editField"
     ></Previews>
 
     <ProjectHoneycomb
@@ -117,6 +142,15 @@
 
     <div class="error" v-if="errorMessage">{{ errorMessage }}</div>
 
+    <Editor
+      v-if="editingField"
+      :modelValue="editingField.obj[editingField.field]"
+      :label="editingField.label"
+      :isMarkdown="editingField.isMarkdown"
+      @save="saveField"
+      @close="editingField = null"
+    />
+
     <div class="options" v-show="toolbar">
       <button
         class="modal-close-button"
@@ -128,6 +162,10 @@
       <span class="share-button btn">
         🌐<a :href="shareUrl()">Share</a>
       </span>
+      &nbsp;
+      <button class="btn" @click="downloadJson" title="Download hackathon.json">
+        📥 Download
+      </button>
       &nbsp;
       <input type="checkbox" v-model="isHeadline" id="isHeadline" />
       <label for="isHeadline" title="Header">⛳</label>
@@ -145,6 +183,8 @@
       <label for="isButtons" title="Join/Contact button">🪟</label>
       <input type="checkbox" v-model="isComments" id="isComments" />
       <label for="isComments" title="Comment buttons">💬</label>
+      <input type="checkbox" v-model="isEditing" id="isEditing" />
+      <label for="isEditing" title="Edit mode">✏️</label>
       <select v-model="darkMode" id="darkMode" @change="changeDark">
         <option value="default" selected>🌗</option>
         <option
@@ -180,6 +220,7 @@ import Footer from "./Footer.vue";
 import Previews from "./Previews.vue";
 import Countdown from "./Countdown.vue";
 import ProjectHoneycomb from "./Honeycomb.vue";
+import Editor from "./Editor.vue";
 
 export default {
   name: "ProjectChallenges",
@@ -196,6 +237,7 @@ export default {
     Previews,
     Header,
     Footer,
+    Editor,
   },
   setup(props, { emit }) {
     const router = useRouter();
@@ -228,6 +270,8 @@ export default {
       { id: "light", name: "Light" },
       { id: "dark", name: "Dark" },
     ]);
+    const isEditing = ref(false);
+    const editingField = ref(null);
 
     const filterProjects = computed(() => {
       if (projects.value === null) return [];
@@ -306,6 +350,50 @@ export default {
         (sortOrder.value ? "&sort=" + sortOrder.value : "") +
         ""
       );
+    };
+
+    const downloadJson = () => {
+      const hackathonJson = {
+        "@context": "http://schema.org",
+        "@type": "Hackathon",
+        name: event.value.name,
+        description: event.value.summary,
+        startDate: event.value.starts_at,
+        endDate: event.value.ends_at,
+        url: event.value.webpage_url || event.value.webpage,
+        location: event.value.location,
+        image: event.value.logo_url,
+        workPerformed: projects.value.map((p) => ({
+          "@type": "CreativeWork",
+          id: p.id,
+          name: p.name,
+          description: p.summary,
+          discussionUrl: p.contact_url,
+          image: p.image_url,
+          url: p.url,
+          text: p.longtext,
+        })),
+      };
+      const blob = new Blob([JSON.stringify(hackathonJson, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "hackathon.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    const editField = (type, obj, field, label, isMarkdown = false) => {
+      editingField.value = { type, obj, field, label, isMarkdown };
+    };
+
+    const saveField = (newValue) => {
+      if (editingField.value) {
+        editingField.value.obj[editingField.value.field] = newValue;
+        editingField.value = null;
+      }
     };
 
     onMounted(() => {
@@ -489,6 +577,8 @@ export default {
       sortOptions,
       darkMode,
       darkOptions,
+      isEditing,
+      editingField,
       filterProjects,
       joinTeam,
       openComment,
@@ -498,6 +588,9 @@ export default {
       changeOrder,
       seePreview,
       shareUrl,
+      downloadJson,
+      editField,
+      saveField,
     };
   },
 };
@@ -712,6 +805,21 @@ export default {
 .share-button a {
   text-decoration: none;
   margin-left: 0.3em;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.edit-btn:hover {
+  background: #eee;
 }
 
 .progress .progress-bar {

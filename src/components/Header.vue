@@ -24,17 +24,40 @@
       >
         🗨️
       </a>
-      <h3 class="event-name">{{ event.name }}</h3>
+      <h3 class="event-name">
+        {{ event.name }}
+        <button
+          v-if="isEditing"
+          class="edit-btn"
+          @click="$emit('editField', 'event', event, 'name', 'Event Name')"
+        >
+          ✏️
+        </button>
+      </h3>
       <span class="event-hostname" v-if="event.hostname">
         <i class="fa fa-bank">🏢</i>
         {{ event.hostname }}</span
       >
-      <span class="event-location" v-if="event.location">
+      <span class="event-location" v-if="event.location || isEditing">
         <i class="fa fa-map">🗺️</i>
-        {{ event.location }}</span
-      >
-      <p class="header-summary" v-if="event.summary">
+        {{ event.location }}
+        <button
+          v-if="isEditing"
+          class="edit-btn"
+          @click="$emit('editField', 'event', event, 'location', 'Location')"
+        >
+          ✏️
+        </button>
+      </span>
+      <p class="header-summary" v-if="event.summary || isEditing">
         {{ event.summary }}
+        <button
+          v-if="isEditing"
+          class="edit-btn"
+          @click="$emit('editField', 'event', event, 'summary', 'Event Summary')"
+        >
+          ✏️
+        </button>
       </p>
     </div>
   </div>
@@ -45,7 +68,9 @@ export default {
   name: "EventHeader",
   props: {
     event: Object,
+    isEditing: Boolean,
   },
+  emits: ["editField"],
 };
 </script>
 
@@ -129,5 +154,20 @@ export default {
   text-align: left;
   margin-top: 0.5em;
   opacity: 0.7;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.edit-btn:hover {
+  background: #eee;
 }
 </style>
