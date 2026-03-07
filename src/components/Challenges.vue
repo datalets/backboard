@@ -807,20 +807,6 @@ export default {
   margin-left: 0.3em;
 }
 
-.edit-btn {
-  background: none;
-  border: none;
-  box-shadow: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 2px;
-  margin: 0;
-  vertical-align: middle;
-}
-
-.edit-btn:hover {
-  background: #eee;
-}
 
 .progress .progress-bar {
   width: 100%;

@@ -156,18 +156,4 @@ export default {
   opacity: 0.7;
 }
 
-.edit-btn {
-  background: none;
-  border: none;
-  box-shadow: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 2px;
-  margin: 0;
-  vertical-align: middle;
-}
-
-.edit-btn:hover {
-  background: #eee;
-}
 </style>

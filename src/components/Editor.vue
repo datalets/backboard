@@ -10,6 +10,7 @@
           v-model="localValue"
           class="editor-textarea"
           :placeholder="'Enter ' + label"
+          ref="editorTextarea"
         ></textarea>
         <div v-if="isMarkdown" class="editor-preview">
           <Markdown :source="localValue" />
@@ -36,6 +37,14 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'save', 'close']);
 
 const localValue = ref(props.modelValue || '');
+const editorTextarea = ref(null);
+
+import { onMounted } from 'vue';
+onMounted(() => {
+  if (editorTextarea.value) {
+    editorTextarea.value.focus();
+  }
+});
 
 watch(() => props.modelValue, (newVal) => {
   localValue.value = newVal || '';
