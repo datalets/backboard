@@ -23,10 +23,28 @@
                 ></a>
               </div>
 
-              <div class="name">{{ project.name }}</div>
+              <div class="name">
+                {{ project.name }}
+                <button
+                  v-if="isEditing"
+                  class="edit-btn"
+                  @click="$emit('editField', 'project', project, 'name', 'Project Name')"
+                >
+                  ✏️
+                </button>
+              </div>
 
               <div class="summary">
-                <p v-show="project.summary">{{ project.summary }}</p>
+                <p v-show="project.summary || isEditing">
+                  {{ project.summary }}
+                  <button
+                    v-if="isEditing"
+                    class="edit-btn"
+                    @click="$emit('editField', 'project', project, 'summary', 'Project Summary')"
+                  >
+                    ✏️
+                  </button>
+                </p>
               </div>
 
               <div class="ident">{{ project.ident }}</div>
@@ -172,9 +190,17 @@
                   </span>
                 </div>
 
-                <div v-if="project.longtext">
+                <div v-if="project.longtext || isEditing">
                   <a class="autotext-link" name="pitch" href="#pitch">PITCH</a>
+                  <button
+                    v-if="isEditing"
+                    class="edit-btn"
+                    @click="$emit('editField', 'project', project, 'longtext', 'Project Pitch', true)"
+                  >
+                    ✏️ Edit Markdown
+                  </button>
                   <Markdown
+                    v-if="project.longtext"
                     class="preview-longtext"
                     :source="project.longtext"
                   />
@@ -241,8 +267,9 @@ export default {
     withComments: Boolean,
     withChallenges: Boolean,
     showExcerpt: Boolean,
+    isEditing: Boolean,
   },
-  emits: ["update:modelValue", "close"],
+  emits: ["update:modelValue", "close", "editField"],
   setup(props, { emit }) {
     const fullscreen = ref(false);
     const ruigehond = ref(0);
@@ -714,6 +741,7 @@ button.nav-prev {
   width: 100%;
   text-align: center;
 }
+
 
 .dark .status {
   background: black;
