@@ -2,6 +2,14 @@
 
 This is a single page application (SPA) that visualizes data from [hackathon.json](https://json.everyhack.day), [Data Package](https://frictionlessdata.io), or the [Dribdat API](https://dribdat.cc).
 
+## The hackathon.json specification
+
+The [hackathon.json](https://json.everyhack.day) standard is a JSON-LD format for encoding challenges and results from time-limited collaborative events.
+
+The Schema.org standard natively supports the Hackathon type, allowing events to be defined using web-friendly metadata. The standard includes the ability to describe sub-entities like duration, location, start and end dates. Challenges and projects are attached as objects with the `CreativeWork` tag.
+
+This project is now the reference implementation for this standard, and its default page load will render the event and any projects (from `workPerformed`) from a `hackathon.json` file in the root if found.
+
 **Demo:** <https://backboard.vercel.app/>
 
 Issues: <https://codeberg.org/dribdat/backboard/issues>
