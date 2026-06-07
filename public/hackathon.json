@@ -1,0 +1,28 @@
+{
+  "@context": "http://schema.org",
+  "@type": "Hackathon",
+  "name": "The Tech We Want",
+  "description": "A collective conversation",
+  "startDate": "2024-10-17T09:00",
+  "endDate": "2024-10-18T18:00",
+  "url": "https://meta.dribdat.cc/event/25",
+  "location": "Planet Earth",
+  "image": "https://okfn.org/assets/images/lg-okfn.svg",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://okfn.org/events/the-tech-we-want-online-summit/"
+  },
+  "workPerformed": [
+    {
+      "@type": "CreativeWork",
+      "dateCreated": "2024-10-18T12:46",
+      "dateModified": "2024-10-18T12:47",
+      "description": "Take conversational artifacts, and run hackathons based on the data.",
+      "discussionUrl": "",
+      "image": "",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Community gardening 🍀",
+      "url": "https://meta.dribdat.cc/project/152"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask"
+  <transition name="modal" appear>
+    <div class="modal-mask" v-show="true"
         @click.self="$emit('close')">
       <div class="modal-wrapper" @click.self="$emit('close')">
         <div class="modal-container"
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: "Modal",
+    name: "ModalDialog",
     data() {
       return {
         boxHeight: 640,

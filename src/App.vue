@@ -28,7 +28,7 @@ export default {
   name: "App",
   components: {},
   setup() {
-    const dribdatApi = ref("/datapackage.json");
+    const dribdatApi = ref("/hackathon.json");
     const dribdatHome = ref("#top");
     const dribdatDribs = ref("");
     const voteUrl = ref("");
@@ -79,9 +79,9 @@ export default {
         baseUrl = baseUrl.substring(0, baseUrl.indexOf("/event/"));
       }
     } else if (baseUrl == null) {
-      baseUrl = "/datapackage.json";
+      baseUrl = "/hackathon.json";
     }
-    if (baseUrl.endsWith("datapackage.json")) {
+    if (baseUrl.endsWith("datapackage.json") || baseUrl.endsWith("hackathon.json")) {
       apiUrl = baseUrl;
       dribUrl = baseUrl.replace("datapackage.json", "posts.json");
     }

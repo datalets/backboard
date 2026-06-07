@@ -1,6 +1,6 @@
 <template>
   <div class="challenges">
-    <Header v-if="isHeadline" :event="event"></Header>
+    <EventHeader v-if="isHeadline" :event="event"></EventHeader>
 
     <div class="grid-container" v-if="!isHexagons">
       <div
@@ -109,7 +109,7 @@
 
     <Countdown v-if="isCountdown" :event="event"></Countdown>
 
-    <Footer v-if="isHeadline" :event="event"></Footer>
+    <EventFooter v-if="isHeadline" :event="event"></EventFooter>
 
     <div class="loading" v-if="projects == null" title="Loading ...">
       <i class="ball">🏀</i>
@@ -194,8 +194,8 @@ export default {
     Countdown,
     ProjectHoneycomb,
     Previews,
-    Header,
-    Footer,
+    EventHeader: Header,
+    EventFooter: Footer,
   },
   setup(props, { emit }) {
     const router = useRouter();
@@ -360,8 +360,31 @@ export default {
           } else {
             profileUrl.value = null;
           }
-          if (
+          if (data["@type"] === "Hackathon" && data.workPerformed) {
+            data.projects = data.workPerformed.map((w, index) => ({
+              id: w.url || index,
+              name: w.name,
+              summary: w.description,
+              image_url: w.image,
+              url: w.url,
+              team: [],
+              is_challenge: false,
+              progress: 100,
+              score: 0,
+              updated_at: w.dateModified,
+            }));
+            data.event = {
+              name: data.name,
+              summary: data.description,
+              starts_at: data.startDate,
+              ends_at: data.endDate,
+              webpage_url: data.url,
+              location: data.location,
+              logo_url: data.image
+            };
+          } else if (
             typeof data.projects === "undefined" &&
+            data.resources &&
             data.resources.length > 0
           ) {
             data.projects = null;
@@ -407,9 +430,9 @@ export default {
             p.score = Math.min(p.score, 100);
             projects.value.push(p);
           });
-          if (data.title) {
-            document.title = data.title;
-          } else if (data.projects.length > 0) {
+          if (data.title || data.name) {
+            document.title = data.title || data.name;
+          } else if (data.projects.length > 0 && data.projects[0].event_name) {
             document.title = data.projects[0].event_name;
           }
           if (typeof data.event !== "undefined") {

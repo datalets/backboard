@@ -19,7 +19,7 @@ export default {
       required: true,
     }
   },
-  setup(props) {
+  setup() {
     let timespan = ref("");
     let deadline = ref("2000-01-01 12:00");
     return {
